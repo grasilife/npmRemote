@@ -1,4 +1,4 @@
-
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { ModuleFederationPlugin } = require("webpack").container;
 
 const mode = process.env.NODE_ENV || 'production';
@@ -26,6 +26,16 @@ module.exports = {
           presets: ["@babel/preset-react"],
         },
       },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {},
+          },
+        ],
+      },
     ],
   },
 
@@ -36,7 +46,11 @@ module.exports = {
       library: { type: 'var', name: 'libs' },
       filename: 'remoteEntry.js',
       exposes: {
-        './antd': './src/antd.js',
+        './antd': './src/antd',
+        './SayHelloFromC': './src/app',
+      },
+      remotes: {
+        'application_b': 'application_b',
       },
       shared: {
         react: {
@@ -49,6 +63,9 @@ module.exports = {
           singleton: true, // only a single version of the shared module is allowed
         },
       },
+    }),
+    new HtmlWebpackPlugin({
+      template: './public/index.html',
     }),
   ],
 };

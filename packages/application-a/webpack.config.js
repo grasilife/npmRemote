@@ -26,6 +26,16 @@ module.exports = {
           presets: ["@babel/preset-react"],
         },
       },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {},
+          },
+        ],
+      },
     ],
   },
 
@@ -40,6 +50,8 @@ module.exports = {
       },
       remotes: {
         'application_b': 'application_b',
+        'libs': 'libs',
+        //当这个项目引入其他组件的远程组件,都需要在这里注入,否则报错,找不到模块
       },
       shared: {
         react: {
